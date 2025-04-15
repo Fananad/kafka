@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm // Скачивает код из Git (репозиторий, где находится Jenkinsfile)
+                checkout scm 
             }
         }
 
