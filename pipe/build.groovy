@@ -20,7 +20,7 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
-                    def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}" // Полное имя образа
+                    def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
                     dir("apps/${params.SERVICE}") {
                         sh "docker build -t ${image} ."
                     }
