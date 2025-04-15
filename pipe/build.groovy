@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'gcr.io/kaniko-project/executor:latest'
-            args '-v /kaniko/.docker:/kaniko/.docker'
-        }
-    }
+    agent any
     parameters {
         choice(name: 'SERVICE', choices: ['api-producer', 'telegram-consumer'], description: 'Какой сервис билдим и публикуем?')
         string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Тег Docker-образа')
