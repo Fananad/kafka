@@ -22,7 +22,6 @@ pipeline {
                 script {
                     def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}" // Полное имя образа
                     dir("apps/${params.SERVICE}") {
-                        // Строим образ из Dockerfile текущего сервиса
                         sh "docker build -t ${image} ."
                     }
                 }
