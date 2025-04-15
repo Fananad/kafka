@@ -1,6 +1,10 @@
 pipeline {
-    agent any               // Где будет выполняться пайплайн (любой Jenkins agent)
-
+    agent {
+        docker {
+            image 'gcr.io/kaniko-project/executor:latest'
+            args '-v /kaniko/.docker:/kaniko/.docker'
+        }
+    }
     parameters {
         // Позволяет выбирать, какой сервис билдим
         choice(name: 'SERVICE', choices: ['api-producer', 'telegram-consumer'], description: 'Какой сервис билдим и публикуем?')
