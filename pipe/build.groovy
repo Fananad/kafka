@@ -22,33 +22,32 @@ pipeline {
                 script {
                     def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
                     dir("apps/${params.SERVICE}") {
-                        sh "id &&  docker build -t ${image} ."
+                        sh "docker build -t ${image} ."
                     }
                 }
             }
         }
 
-        // stage('Push to DockerHub') {
-        //     steps {
-        //         script {
-        //             def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
-        //             withCredentials([
-        //                 usernamePassword(
-        //                     credentialsId: "${CREDENTIALS_ID}",
-        //                     usernameVariable: 'DOCKER_USER',
-        //                     passwordVariable: 'DOCKER_PASS'
-        //                 )
-        //             ]) {
-        //                 // Авторизация в DockerHub и пуш образа
-        //                 sh """
-        //                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-        //                     docker push ${image}
-        //                     docker logout
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Push to DockerHub') {
+            steps {
+                script {
+                    def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: "${CREDENTIALS_ID}",
+                            usernameVariable: 'DOCKER_USER',
+                            passwordVariable: 'DOCKER_PASS'
+                        )
+                    ]) {
+                        sh """
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker push ${image}
+                            docker logout
+                        """
+                    }
+                }
+            }
+        }
     }
 
     post {
