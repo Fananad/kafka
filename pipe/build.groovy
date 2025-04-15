@@ -11,8 +11,8 @@ pipeline {
     }
 
     environment {
-        DOCKER_REPO = 'kalaber/kafka'        // Имя пользователя DockerHub
-        CREDENTIALS_ID = 'docker_hub' // ID учётки в Jenkins Credentials
+        DOCKER_REPO = 'kalaber/kafka'        
+        CREDENTIALS_ID = 'docker_hub' 
     }
 
     stages {
