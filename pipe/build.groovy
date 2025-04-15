@@ -6,10 +6,7 @@ pipeline {
         }
     }
     parameters {
-        // Позволяет выбирать, какой сервис билдим
         choice(name: 'SERVICE', choices: ['api-producer', 'telegram-consumer'], description: 'Какой сервис билдим и публикуем?')
-
-        // Позволяет задать тег образа
         string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Тег Docker-образа')
     }
 
