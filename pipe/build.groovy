@@ -1,0 +1,67 @@
+pipeline {
+    agent any               // Где будет выполняться пайплайн (любой Jenkins agent)
+
+    parameters {
+        // Позволяет выбирать, какой сервис билдим
+        choice(name: 'SERVICE', choices: ['api-producer', 'telegram-consumer'], description: 'Какой сервис билдим и публикуем?')
+
+        // Позволяет задать тег образа
+        string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Тег Docker-образа')
+    }
+
+    environment {
+        DOCKER_REPO = 'kalaber/kafka'        // Имя пользователя DockerHub
+        CREDENTIALS_ID = 'docker_hub' // ID учётки в Jenkins Credentials
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm // Скачивает код из Git (репозиторий, где находится Jenkinsfile)
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                script {
+                    def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}" // Полное имя образа
+                    dir("apps/${params.SERVICE}") {
+                        // Строим образ из Dockerfile текущего сервиса
+                        sh "docker build -t ${image} ."
+                    }
+                }
+            }
+        }
+
+        // stage('Push to DockerHub') {
+        //     steps {
+        //         script {
+        //             def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
+        //             withCredentials([
+        //                 usernamePassword(
+        //                     credentialsId: "${CREDENTIALS_ID}",
+        //                     usernameVariable: 'DOCKER_USER',
+        //                     passwordVariable: 'DOCKER_PASS'
+        //                 )
+        //             ]) {
+        //                 // Авторизация в DockerHub и пуш образа
+        //                 sh """
+        //                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+        //                     docker push ${image}
+        //                     docker logout
+        //                 """
+        //             }
+        //         }
+        //     }
+        // }
+    }
+
+    post {
+        success {
+            echo "✅ Образ успешно опубликован"
+        }
+        failure {
+            echo "❌ Публикация не удалась"
+        }
+    }
+}
