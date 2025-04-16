@@ -46,15 +46,14 @@ pipeline {
             steps {
                 script {
                     def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
-                    {
-                        sh """
-                            docker push ${image}
-                            docker logout
-                        """
-                    }
+                    sh """
+                        docker push ${image}
+                        docker logout
+                    """
                 }
             }
         }
+
     }
 
     post {
