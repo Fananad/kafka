@@ -38,6 +38,7 @@ pipeline {
                         sh """
                             docker build -t ${image} .
                             docker push ${image}
+                            docker logout
                         """    
                     }
                 }
