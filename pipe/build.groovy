@@ -36,7 +36,7 @@ pipeline {
                     def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
                     dir("apps/${params.SERVICE}") {
                         sh """
-                            docker build -t ${image} ."
+                            docker build -t ${image} .
                             docker push ${image}
                         """    
                     }
