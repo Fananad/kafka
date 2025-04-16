@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        DOCKER_REPO = 'kalaber'        
+        DOCKER_REPO = 'kalaber/kafka'        
         CREDENTIALS_ID = 'docker_hub' 
     }
 
@@ -33,7 +33,7 @@ pipeline {
         stage('Build  and push to docker hub') {
             steps {
                 script {
-                    def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
+                    def image = "${DOCKER_REPO}:${params.IMAGE_TAG}"
                     dir("apps/${params.SERVICE}") {
                         sh """
                             docker build -t ${image} .
