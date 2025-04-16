@@ -2,7 +2,7 @@ pipeline {
     agent any
     parameters {
         choice(name: 'SERVICE', choices: ['api-producer', 'telegram-consumer'], description: 'Какой сервис билдим и публикуем?')
-        string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Тег Docker-образа')
+        // string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Тег Docker-образа')
     }
 
     environment {
@@ -33,7 +33,7 @@ pipeline {
         stage('Build  and push to docker hub') {
             steps {
                 script {
-                    def image = "${DOCKER_REPO}:${params.IMAGE_TAG}"
+                    def image = "${DOCKER_REPO}:${params.SERVICE}"
                     dir("apps/${params.SERVICE}") {
                         sh """
                             docker build -t ${image} .
