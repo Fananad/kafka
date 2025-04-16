@@ -16,6 +16,19 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: "${CREDENTIALS_ID}",
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    '''
+                }
+            }
+        }
 
         stage('Build Image') {
             steps {
@@ -33,13 +46,7 @@ pipeline {
             steps {
                 script {
                     def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
-                    withCredentials([
-                        usernamePassword(
-                            credentialsId: "${CREDENTIALS_ID}",
-                            usernameVariable: 'DOCKER_USER',
-                            passwordVariable: 'DOCKER_PASS'
-                        )
-                    ]) {
+                    {
                         sh """
                             echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                             docker push ${image}
