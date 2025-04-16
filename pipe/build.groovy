@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        DOCKER_REPO = 'kalaber/kafka'        
+        DOCKER_REPO = 'kalaber'        
         CREDENTIALS_ID = 'docker_hub' 
     }
 
