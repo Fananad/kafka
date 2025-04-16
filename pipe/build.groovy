@@ -30,26 +30,16 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
+        stage('Build  and push to docker hub') {
             steps {
                 script {
                     def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
                     dir("apps/${params.SERVICE}") {
-                        sh "docker build -t ${image} ."
-                        sh "docker images"
+                        sh """
+                            docker build -t ${image} ."
+                            docker push ${image}
+                        """    
                     }
-                }
-            }
-        }
-
-        stage('Push to DockerHub') {
-            steps {
-                script {
-                    def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
-                    sh """
-                        docker push ${image}
-                        docker logout
-                    """
                 }
             }
         }
