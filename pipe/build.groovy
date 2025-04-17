@@ -2,11 +2,11 @@ pipeline {
     agent any
     parameters {
         choice(name: 'SERVICE', choices: ['api-producer', 'telegram-consumer'], description: 'Какой сервис билдим и публикуем?')
-        string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Тег Docker-образа')
+        // string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Тег Docker-образа')
     }
 
     environment {
-        DOCKER_REPO = 'kalaber'        
+        DOCKER_REPO = 'kalaber/kafka'        
         CREDENTIALS_ID = 'docker_hub' 
     }
 
@@ -33,7 +33,7 @@ pipeline {
         stage('Build  and push to docker hub') {
             steps {
                 script {
-                    def image = "${DOCKER_REPO}/${params.SERVICE}:${params.IMAGE_TAG}"
+                    def image = "${DOCKER_REPO}:${params.SERVICE}"
                     dir("apps/${params.SERVICE}") {
                         sh """
                             docker build -t ${image} .
@@ -44,7 +44,6 @@ pipeline {
                 }
             }
         }
-
     }
 
     post {
