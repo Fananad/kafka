@@ -16,8 +16,8 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
                     sh '''
-                        echo $KUBECONFIG_PATH
-                        echo $KUBECONFIG
+                        echo $KUBECONFIG | base64 -d > $KUBECONFIG_PATH
+                        kubectl get configmap
                     '''
 
                     // Указываем переменную окружения на kubeconfig
