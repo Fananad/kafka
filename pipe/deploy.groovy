@@ -30,7 +30,7 @@ pipeline {
 
     post {
         cleanup {
-            sh "rm -rf ${env.WORKSPACE}/*"
+            cleanWs()
         }
         success {
             echo "✅ Образ задеплоен"
