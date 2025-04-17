@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        KUBECONFIG = credentials('kubeconfig') // ID секрета в Jenkins
+        KUBECONFIG_PATH = '~/.kube/config'
+        KUBECONFIG = credentials('kubeconfig')
     }
 
     stages {
@@ -11,22 +12,28 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Deploy to Kubernetes') {
-            
+        stage('Подключение к кластеру') {
             steps {
-                sh '''
-                    kubectl get po
-                '''
+                withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
+                    script {
+                        // Сохраняем kubeconfig в файл
+                        writeFile file: env.KUBECONFIG_PATH, text: env.KUBECONFIG
+                    }
+
+                    // Указываем переменную окружения на kubeconfig
+                    // withEnv(["KUBECONFIG=${env.WORKSPACE}/${env.KUBECONFIG_PATH}"]) {
+                        sh 'kubectl config get-contexts'
+                    }
+                }
             }
-        }
     }
 
     post {
         success {
-            echo "✅ Образ успешно опубликован"
+            echo "✅ Образ задеплоен"
         }
         failure {
-            echo "❌ Публикация не удалась"
+            echo "❌ При деплое возникли ошибки"
         }
     }
 }
