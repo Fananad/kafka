@@ -7,7 +7,7 @@ app = FastAPI()
 logging.basicConfig(level=logging.INFO)
 
 # URL сервиса telegram-consumer, куда будем пересылать запрос
-TELEGRAM_CONSUMER_URL = os.getenv("TELEGRAM_CONSUMER_URL", "http://localhost:8001/send")
+TELEGRAM_CONSUMER_URL = os.getenv("TELEGRAM_CONSUMER_URL", "http://localhost:9000/send")
 
 
 @app.post("/send")
