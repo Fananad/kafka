@@ -21,8 +21,8 @@ pipeline {
                     }
 
                     // Указываем переменную окружения на kubeconfig
-                    // withEnv(["KUBECONFIG=${env.WORKSPACE}/${env.KUBECONFIG_PATH}"]) {
-                        sh 'kubectl config get-contexts'
+                    withEnv(["KUBECONFIG=${env.WORKSPACE}/${env.KUBECONFIG_PATH}"]) {
+                        sh 'kubectl get po'
                     }
                 }
             }
