@@ -15,15 +15,15 @@ pipeline {
         stage('Подключение к кластеру') {
             steps {
                 withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
-                    script {
-                        // Сохраняем kubeconfig в файл
-                        writeFile file: env.KUBECONFIG_PATH, text: env.KUBECONFIG
-                    }
+                    sh '''
+                        echo $KUBECONFIG_PATH
+                        echo $KUBECONFIG
+                    '''
 
                     // Указываем переменную окружения на kubeconfig
-                    withEnv(["KUBECONFIG=${env.WORKSPACE}/${env.KUBECONFIG_PATH}"]) {
-                        sh 'kubectl get po'
-                    }
+                    // withEnv(["KUBECONFIG=${env.WORKSPACE}/${env.KUBECONFIG_PATH}"]) {
+                    //     sh 'kubectl get po'
+                    // }
                 }
             }
         }
