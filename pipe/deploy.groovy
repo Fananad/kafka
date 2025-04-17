@@ -15,15 +15,13 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
                     sh '''
-                        mkdir ~/.kube/
-                        echo $KUBECONFIG | base64 -d > ~/.kube/config
-                        kubectl get configmap
-                    '''
+                        mkdir -p ~/.kube
+                        echo "$KUBECONFIG_CONTENT" > ~/.kube/config
+                        chmod 600 ~/.kube/config
 
-                    // Указываем переменную окружения на kubeconfig
-                    // withEnv(["KUBECONFIG=${env.WORKSPACE}/${env.KUBECONFIG_PATH}"]) {
-                    //     sh 'kubectl get po'
-                    // }
+                        kubectl config get-contexts
+                        kubectl get pods -A
+                    '''
                 }
             }
         }
