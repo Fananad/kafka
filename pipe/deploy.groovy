@@ -14,14 +14,14 @@ pipeline {
         stage('Подключение к кластеру') {
             steps {
                 withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
-                    sh '''
-                        mkdir -p ~/.kube
-                        echo "$KUBECONFIG_CONTENT" > ~/.kube/config
-                        chmod 600 ~/.kube/config
-
-                        kubectl config get-contexts
-                        kubectl get pods -A
-                    '''
+                    script {
+                        writeFile file: 'kubeconfig.yaml', text: env.KUBECONFIG_CONTENT
+                    }
+                    withEnv(["KUBECONFIG=${env.WORKSPACE}/kubeconfig.yaml"]) {
+                        sh '''
+                            kubectl get pods -A
+                        '''
+                    }
                 }
             }
         }
@@ -29,6 +29,9 @@ pipeline {
 
 
     post {
+        cleanup {
+            sh 'rm -fr ${env.WORKSPACE}/*'
+        }
         success {
             echo "✅ Образ задеплоен"
         }
