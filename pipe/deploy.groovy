@@ -15,6 +15,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
                     sh '''
+                        mkdir ~/.kube/
                         echo $KUBECONFIG | base64 -d > ~/.kube/config
                         kubectl get configmap
                     '''
