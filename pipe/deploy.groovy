@@ -19,6 +19,7 @@ pipeline {
                             kubectl config get-contexts
                             kubectl get pods -A
                         '''
+                    }
                 }
             }
         }
