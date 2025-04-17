@@ -6,7 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
-  - host: 158.160.183.237     
+  - host: kafka.loc
     http:
       paths:
       - path: /telegram-consumer(/|$)(.*)
