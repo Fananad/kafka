@@ -1,9 +1,9 @@
 pipeline {
     agent any
 
-    environment {
-        KUBECONFIG = credentials('kubeconfig')
-    }
+    // environment {
+    //     KUBECONFIG = credentials('kubeconfig')
+    // }
 
     stages {
         stage('Checkout') {
@@ -13,16 +13,12 @@ pipeline {
         }
         stage('Подключение к кластеру') {
             steps {
-                withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
-                    script {
-                        writeFile file: 'kubeconfig.yaml', text: env.KUBECONFIG_CONTENT
-                    }
-                    withEnv(["KUBECONFIG=${env.WORKSPACE}/kubeconfig.yaml"]) {
-                        sh """
-                            cat kubeconfig.yaml
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
+                    withEnv(["KUBECONFIG=${KUBECONFIG_FILE}"]) {
+                        sh '''
+                            kubectl config get-contexts
                             kubectl get pods -A
-                        """
-                    }
+                        '''
                 }
             }
         }
