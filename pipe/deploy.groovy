@@ -26,7 +26,9 @@ pipeline {
                     }
                 }
             }
+        }
     }
+
 
     post {
         success {
