@@ -18,9 +18,10 @@ pipeline {
                         writeFile file: 'kubeconfig.yaml', text: env.KUBECONFIG_CONTENT
                     }
                     withEnv(["KUBECONFIG=${env.WORKSPACE}/kubeconfig.yaml"]) {
-                        sh '''
+                        sh """
+                            cat kubeconfig.yaml
                             kubectl get pods -A
-                        '''
+                        """
                     }
                 }
             }
