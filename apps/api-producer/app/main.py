@@ -2,19 +2,23 @@ from fastapi import FastAPI, Request, HTTPException
 import httpx
 import os
 import logging
+from datetime import datetime
+import traceback
 
 app = FastAPI()
-logging.basicConfig(level=logging.INFO)
 
-# URL сервиса telegram-consumer, куда будем пересылать запрос
-TELEGRAM_CONSUMER_URL = os.getenv("TELEGRAM_CONSUMER_URL", "http://localhost:9000/send")
+# Конфигурация логгера
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",  # Включаем время
+)
+
+# URL telegram-consumer
+TELEGRAM_CONSUMER_URL = os.getenv("TELEGRAM_CONSUMER_URL", "http://localhost:8001/send")
 
 
 @app.post("/send")
 async def send_message(request: Request):
-    """
-    Обрабатывает входящий POST-запрос и пересылает сообщение в telegram-consumer
-    """
     try:
         data = await request.json()
         message = data.get("message")
@@ -22,14 +26,16 @@ async def send_message(request: Request):
         if not message:
             raise HTTPException(status_code=400, detail="Missing 'message' field")
 
-        logging.info(f"📥 Получено сообщение: {message}")
+        logging.info("📥 Получено сообщение от клиента: %s", message)
+        logging.info("📨 Отправляем в telegram-consumer по адресу: %s", TELEGRAM_CONSUMER_URL)
 
         async with httpx.AsyncClient() as client:
             response = await client.post(TELEGRAM_CONSUMER_URL, json={"message": message})
             response.raise_for_status()
             telegram_response = response.json()
 
-        logging.info(f"📤 Переслано в telegram-consumer: {telegram_response}")
+        logging.info("📬 Ответ от telegram-consumer: %s", telegram_response)
+
         return {
             "status": "forwarded",
             "message": message,
@@ -37,9 +43,9 @@ async def send_message(request: Request):
         }
 
     except httpx.RequestError as e:
-        logging.error(f"❌ Ошибка соединения с telegram-consumer: {e}")
+        logging.error("❌ Ошибка соединения с telegram-consumer: %s", e)
         raise HTTPException(status_code=502, detail="Cannot reach telegram-consumer")
 
     except Exception as e:
-        logging.error(f"❌ Ошибка: {e}")
+        logging.error("❌ Внутренняя ошибка:\n%s", traceback.format_exc())
         raise HTTPException(status_code=500, detail="Internal server error")
