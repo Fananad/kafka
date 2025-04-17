@@ -14,7 +14,7 @@ logging.basicConfig(
 )
 
 # URL telegram-consumer
-TELEGRAM_CONSUMER_URL = os.getenv("TELEGRAM_CONSUMER_URL", "http://localhost:8001/send")
+TELEGRAM_CONSUMER_URL = os.getenv("TELEGRAM_CONSUMER_URL", "http://172.16.0.21:9000/send")
 
 
 @app.post("/send")
