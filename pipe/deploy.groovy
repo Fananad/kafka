@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        KUBECONFIG_PATH = '~/.kube/config'
         KUBECONFIG = credentials('kubeconfig')
     }
 
@@ -16,7 +15,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
                     sh '''
-                        echo $KUBECONFIG | base64 -d > $KUBECONFIG_PATH
+                        echo $KUBECONFIG | base64 -d > ~/.kube/config
                         kubectl get configmap
                     '''
 
