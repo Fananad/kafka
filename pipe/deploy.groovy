@@ -30,7 +30,7 @@ pipeline {
 
     post {
         cleanup {
-            sh 'rm -fr ${env.WORKSPACE}/*'
+            sh "rm -fr ${env.WORKSPACE}/*"
         }
         success {
             echo "✅ Образ задеплоен"
