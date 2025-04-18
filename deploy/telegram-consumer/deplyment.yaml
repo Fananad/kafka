@@ -19,6 +19,4 @@ spec:
         image: kalaber/kafka:telegram-consumer
         ports:
         - containerPort: 9000
-        env:
-        - name: TELEGRAM_CONSUMER_URL
-          value: "http://telegram-consumer:8000/send"
+

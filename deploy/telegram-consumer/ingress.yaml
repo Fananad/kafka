@@ -9,7 +9,7 @@ spec:
   - host: momo-store-podionov.ru
     http:
       paths:
-      - path: /kube/telegram-consumer(/|$)(.*)
+      - path: /
         pathType: Prefix
         backend:
           service:
