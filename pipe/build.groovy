@@ -49,6 +49,7 @@ pipeline {
     post {
         success {
             echo "✅ Образ успешно опубликован"
+            build job: 'deploy'
         }
         failure {
             echo "❌ Публикация не удалась"
