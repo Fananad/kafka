@@ -21,6 +21,14 @@ async def send_to_telegram(request: Request):
     log.info(f"🔍 Получен JSON: {data}")
     message = data.get("message")
     log.info(f"📨 Извлечено поле message: {message}")
+    
+    bot_token = os.getenv("BOT_TOKEN")
+    chat_id = os.getenv("CHAT_ID")
+    telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+
+    log.info(f"✅ BOT_TOKEN задан: {'да' if bot_token else 'нет'}")
+    log.info(f"✅ CHAT_ID: {chat_id}")
+    log.info(f"📡 URL: {telegram_url}")
 
     payload = {
         "chat_id": CHAT_ID,
