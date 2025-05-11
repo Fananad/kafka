@@ -13,6 +13,7 @@ pipeline {
                         sh '''
                             kubectl apply -f deploy/telegram-consumer/service.yaml
                             kubectl apply -f deploy/telegram-consumer/deplyment.yaml
+                            kubectl delete pod -l app=telegram-consumer
                         '''
                     }
                 }
@@ -26,6 +27,7 @@ pipeline {
                             kubectl apply -f deploy/api-producer/deployment.yaml
                             kubectl apply -f deploy/api-producer/ingress.yaml
                             kubectl apply -f deploy/api-producer/service.yaml
+                            kubectl delete pod -l app=api-producer
                         '''
                     }
                 }
