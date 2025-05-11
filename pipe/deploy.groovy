@@ -11,7 +11,6 @@ pipeline {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
                     withEnv(["KUBECONFIG=${KUBECONFIG_FILE}"]) {
                         sh '''
-                            kubectl apply -f deploy/telegram-consumer/ingress.yaml
                             kubectl apply -f deploy/telegram-consumer/service.yaml
                             kubectl apply -f deploy/telegram-consumer/deplyment.yaml
                         '''
