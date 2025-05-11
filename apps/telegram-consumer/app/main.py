@@ -18,11 +18,9 @@ TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 @app.post("/send")
 async def send_to_telegram(request: Request):
     data = await request.json()
+    log.info(f"🔍 Получен JSON: {data}")
     message = data.get("message")
-
-    if not message:
-        log.warning("⚠️ Поле 'message' отсутствует в теле запроса.")
-        raise HTTPException(status_code=400, detail="Missing 'message' field")
+    log.info(f"📨 Извлечено поле message: {message}")
 
     payload = {
         "chat_id": CHAT_ID,
