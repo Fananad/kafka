@@ -19,4 +19,10 @@ spec:
         image: kalaber/kafka:telegram-consumer
         ports:
         - containerPort: 9000
+        env:
+        - name: BOT_TOKEN
+          value: "5933756043:AAE8JLL5KIzgrNBeTP5e-1bkbJy4YRoeGjs"
+        - name: CHAT_ID
+          value: "-1002165344501"
+
 
