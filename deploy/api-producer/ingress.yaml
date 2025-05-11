@@ -1,18 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: telegram-consumer-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: api-producer-ingress
 spec:
+  ingressClassName: nginx
   rules:
-  - host: momo-store-podionov.ru
+  - host: kafkakube.ru
     http:
       paths:
-      - path: /
+      - path: /send
         pathType: Prefix
         backend:
           service:
-            name: telegram-consumer
+            name: api-producer
             port:
               number: 80

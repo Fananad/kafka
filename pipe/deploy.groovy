@@ -1,17 +1,12 @@
 pipeline {
     agent any
-
-    // environment {
-    //     KUBECONFIG = credentials('kubeconfig')
-    // }
-
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        stage('Подключение к кластеру') {
+        stage('Deploy telegram-consumer') {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
                     withEnv(["KUBECONFIG=${KUBECONFIG_FILE}"]) {
@@ -24,7 +19,20 @@ pipeline {
                 }
             }
         }
-    }
+        stage('Deploy api-producer') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
+                    withEnv(["KUBECONFIG=${KUBECONFIG_FILE}"]) {
+                        sh '''
+                            kubectl apply -f deploy/api-producer/deployment.yaml
+                            kubectl apply -f deploy/api-producer/ingress.yaml
+                            kubectl apply -f deploy/api-producer/service.yaml
+                        '''
+                    }
+                }
+            }
+        }
+    }   
 
 
     post {
