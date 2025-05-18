@@ -38,7 +38,7 @@ pipeline {
                         sh """ 
                             cat app/main.py
                             docker build -t ${image}-${BUILD_NUMBER} .
-                            docker push ${image}
+                            docker push ${image}-${BUILD_NUMBER} 
                             docker logout
                         """    
                     }
