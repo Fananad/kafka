@@ -11,9 +11,9 @@ pipeline {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
                     withEnv(["KUBECONFIG=${KUBECONFIG_FILE}"]) {
                         sh '''
+                            kubectl delete pod -l app=telegram-consumer
                             kubectl apply -f deploy/telegram-consumer/service.yaml
                             kubectl apply -f deploy/telegram-consumer/deplyment.yaml
-                            kubectl delete pod -l app=telegram-consumer
                         '''
                     }
                 }
@@ -24,10 +24,10 @@ pipeline {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
                     withEnv(["KUBECONFIG=${KUBECONFIG_FILE}"]) {
                         sh '''
+                            kubectl delete pod -l app=api-producer
                             kubectl apply -f deploy/api-producer/deployment.yaml
                             kubectl apply -f deploy/api-producer/ingress.yaml
                             kubectl apply -f deploy/api-producer/service.yaml
-                            kubectl delete pod -l app=api-producer
                         '''
                     }
                 }
