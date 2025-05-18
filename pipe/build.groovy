@@ -35,7 +35,8 @@ pipeline {
                 script {
                     def image = "${DOCKER_REPO}:${params.SERVICE}"
                     dir("apps/${params.SERVICE}") {
-                        sh """
+                        sh """ 
+                            cat app/main.py
                             docker build -t ${image} .
                             docker push ${image}
                             docker logout
