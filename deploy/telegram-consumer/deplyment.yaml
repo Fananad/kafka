@@ -17,6 +17,7 @@ spec:
       containers:
       - name: telegram-consumer
         image: kalaber/kafka:telegram-consumer
+        imagePullPolicy: Always
         ports:
         - containerPort: 9000
         env:
