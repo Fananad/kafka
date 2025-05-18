@@ -37,7 +37,7 @@ pipeline {
                     dir("apps/${params.SERVICE}") {
                         sh """ 
                             cat app/main.py
-                            docker build -t ${image} .
+                            docker build -t ${image}-${BUILD_NUMBER} .
                             docker push ${image}
                             docker logout
                         """    
