@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: telegram-consumer
-        image: kalaber/kafka:telegram-consumer-50
+        image: kalaber/kafka:telegram-consumer-51
         ports:
         - containerPort: 9000
         env:
